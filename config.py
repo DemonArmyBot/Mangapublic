@@ -1,26 +1,29 @@
+import os
+
+# Read from actual environment variables (not hardcoded dict)
 env_vars = {
-  # Get From my.telegram.org
-  "API_HASH": "e7dd0576c5ac0ff8f90971d6bb04c8f5",
-  # Get From my.telegram.org
-  "API_ID": "24473318",
-  #Get For @BotFather
-  "BOT_TOKEN": "",
-  # Get For tembo.io
-  "DATABASE_URL_PRIMARY": "",
-  # Logs Channel Username Without @
-  "CACHE_CHANNEL": "-1002186907526",
-  # Force Subs Channel username without @
-  "CHANNEL": "demonarmy",
-  # {chap_num}: Chapter Number
-  # {chap_name} : Manga Name
-  # Ex : Chapter {chap_num} {chap_name} @Manhwa_Arena
-  "FNAME": "",
-  # Put Thumb Link 
-  "THUMB": ""
+    "API_HASH": os.getenv("API_HASH", "e7dd0576c5ac0ff8f90971d6bb04c8f5"),
+    "API_ID": os.getenv("API_ID", "24473318"),
+    "BOT_TOKEN": os.getenv("BOT_TOKEN", ""),
+    "DATABASE_URL_PRIMARY": os.getenv("DATABASE_URL_PRIMARY", ""),
+    "CACHE_CHANNEL": os.getenv("CACHE_CHANNEL", "-1002186907526"),
+    "CHANNEL": os.getenv("CHANNEL", "demonarmy"),
+    "FNAME": os.getenv("FNAME", ""),
+    "THUMB": os.getenv("THUMB", "")
 }
 
-dbname = env_vars.get('DATABASE_URL_PRIMARY') or env_vars.get('DATABASE_URL') or 'sqlite:///test.db'
+# Validate required variables
+if not env_vars["BOT_TOKEN"]:
+    raise ValueError("BOT_TOKEN environment variable is required!")
+    
+if not env_vars["DATABASE_URL_PRIMARY"]:
+    raise ValueError("DATABASE_URL_PRIMARY environment variable is required!")
 
+dbname = env_vars['DATABASE_URL_PRIMARY']
+
+# Fix PostgreSQL URL format
 if dbname.startswith('postgres://'):
     dbname = dbname.replace('postgres://', 'postgresql://', 1)
-    
+
+print(f"Database URL: {dbname}")
+print(f"Bot Token present: {bool(env_vars['BOT_TOKEN'])}")

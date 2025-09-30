@@ -17,3 +17,4 @@ gunicorn
 httpx # New Request 
 requests
 tenacity
+playwright

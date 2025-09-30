@@ -16,3 +16,4 @@ flask
 gunicorn
 httpx # New Request 
 requests
+tenacity
